@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="基站定位"
+        android:textColor="#66ccff"
+        android:textSize="40dp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="250dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/logo" >
+
+        <EditText
+            android:id="@+id/time"
+            android:layout_width="256dp"
+            android:layout_height="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/edittext"
+            android:hint=" 获取周期/ms"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/number"
+            android:layout_width="256dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/time"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edittext"
+            android:hint=" 获取次数"
+            android:inputType="number" />
+
+        <Button
+            android:id="@+id/jizhan_get"
+            android:layout_width="256dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/number"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/button"
+            android:text="传送参数"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+</RelativeLayout>

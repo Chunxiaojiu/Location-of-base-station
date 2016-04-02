@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/item" >
+
+    <TextView
+        android:id="@+id/mcc"
+        android:layout_width="30dp"
+        android:layout_height="20dp"
+        android:text="mmc" />
+
+    <TextView
+        android:id="@+id/mnc"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_toRightOf="@id/mcc"
+        android:text="mnc" />
+
+    <TextView
+        android:id="@+id/cid"
+        android:layout_width="60dp"
+        android:layout_height="20dp"
+        android:layout_toRightOf="@id/mnc"
+        android:text="cid" />
+
+    <TextView
+        android:id="@+id/lac"
+        android:layout_width="30dp"
+        android:layout_height="20dp"
+        android:layout_toRightOf="@id/cid"
+        android:text="lac" />
+
+    <TextView
+        android:id="@+id/rssi"
+        android:layout_width="30dp"
+        android:layout_height="20dp"
+        android:layout_toRightOf="@id/lac"
+        android:text="rssi" />
+
+    <TextView
+        android:id="@+id/lat"
+        android:layout_width="80dp"
+        android:layout_height="20dp"
+        android:layout_toRightOf="@id/rssi"
+        android:text="lat" />
+
+    <TextView
+        android:id="@+id/lon"
+        android:layout_width="80dp"
+        android:layout_height="20dp"
+        android:layout_toRightOf="@id/lat"
+        android:text="lon" />
+    <TextView
+        android:id="@+id/adress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="adr" />
+    
+
+</RelativeLayout>
