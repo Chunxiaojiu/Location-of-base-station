@@ -14,12 +14,21 @@
 
     <Button
         android:id="@+id/get_lon"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/processbar"
         android:layout_marginTop="10dp"
         android:background="@drawable/button"
         android:text="数据转换" />
+
+    <Button
+        android:id="@+id/count"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/result"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/button"
+        android:text="测试专用" />
 
     <ListView
         android:id="@+id/result"

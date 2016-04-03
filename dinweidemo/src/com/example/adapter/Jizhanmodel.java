@@ -21,7 +21,7 @@ public class Jizhanmodel {
 		setLAT(lAT);
 		setLON(lON);
 	}
-
+	
 	public String getLAT() {
 		return LAT;
 	}

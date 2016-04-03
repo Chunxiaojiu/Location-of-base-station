@@ -40,15 +40,19 @@ public class Get_List extends Activity {
 	private List<Jizhanmodel> list;
 	private JizhanAdapter jzadapter;
 	private int[][] InfoBuf = new int[7][4];
-	private Button btn_get;
+	private Button btn_get,countbutton;
 	private static int num, count;
-	private static int n,processnum = 0;
+	private static int n, processnum = 0;
 	private Db db = new Db(this);
-	Handler getmsg = new Handler() {
+	/*
+	 * 主函数数据处理
+	 */
+	Handler getmsg = new Handler(){
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 1:
 				String jsonstr = (String) msg.obj;
+				Log.i("PATH", jsonstr.toString());
 				try {
 					JSONArray jsarr = new JSONArray(jsonstr);
 					for (int i = 0; i < jsarr.length(); i++) {
@@ -74,43 +78,63 @@ public class Get_List extends Activity {
 				String json_jiwei = (String) msg.obj;
 				processnum = processnum + 1;
 				ps.setProgress(10 * processnum / count);
-						try {
+				try {
 					JSONObject jsob1 = new JSONObject(json_jiwei);
 					String lon = jsob1.getString("lon");
 					String lat = jsob1.getString("lat");
 					String adr = jsob1.getString("address");
-					Log.i("lat+lon",lat+lon);
+					Log.i("lat+lon", lat + lon);
 					SQLiteDatabase dbwrite = db.getWritableDatabase();
 					ContentValues jinwei = new ContentValues();
 					jinwei.put("LAT", lat);
 					jinwei.put("LON", lon);
-					String[] charn = { String.valueOf(n+1) };
+					String[] charn = { String.valueOf(n + 1) };
 					dbwrite.update("jizhan", jinwei, "_id=?", charn);
 					dbwrite.close();
 					SQLiteDatabase dbread = db.getReadableDatabase();
 					Cursor c = dbread.query("jizhan", null, null, null, null,
 							null, null);
-					if(n <= count){
-					c.moveToPosition(n);
-					String MCC = c.getString(c.getColumnIndex("MCC"));
-					String MNC = c.getString(c.getColumnIndex("MNC"));
-					String CID = c.getString(c.getColumnIndex("CID"));
-					String LAC = c.getString(c.getColumnIndex("LAC"));
-					String RSSI = c.getString(c.getColumnIndex("RSSI"));
-					String LAT = c.getString(c.getColumnIndex("LAT"));
-					String LON = c.getString(c.getColumnIndex("LON"));
-					Log.i("123", LAT+LON);
-					list.set(n,new Jizhanmodel(MCC, MNC, CID, LAC, RSSI, LAT,
-							LON, adr));
-					
-					n = n + 1;}
+					if (n <= count) {
+						c.moveToPosition(n);
+						String MCC = c.getString(c.getColumnIndex("MCC"));
+						String MNC = c.getString(c.getColumnIndex("MNC"));
+						String CID = c.getString(c.getColumnIndex("CID"));
+						String LAC = c.getString(c.getColumnIndex("LAC"));
+						String RSSI = c.getString(c.getColumnIndex("RSSI"));
+						String LAT = c.getString(c.getColumnIndex("LAT"));
+						String LON = c.getString(c.getColumnIndex("LON"));
+						Log.i("123", LAT + LON);
+						list.set(n, new Jizhanmodel(MCC, MNC, CID, LAC, RSSI,
+								LAT, LON, adr));
+
+						n = n + 1;
+					}
 					dbread.close();
 					jzadapter.notifyDataSetChanged();
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 				break;
-
+			case 4://该获取的JSON数据在GetJson的第三类函数前标明,采用原生的JSON来处理，后期可以打包成函数复用
+				String jsonluxian = (String) msg.obj;
+				try {
+					JSONObject jsobj = new JSONObject(jsonluxian).getJSONObject("result");
+					Log.i("PATH", jsobj.toString());
+					JSONArray jsarr = jsobj.getJSONArray("routes");
+					Log.i("PATH", jsarr.toString());//双重循环解析json数组
+					for (int i = 0; i < jsarr.length(); i++) {
+						JSONObject jssroutes = jsarr.getJSONObject(i);
+						JSONArray jsarrsteps = jssroutes.getJSONArray("steps");
+						for(int j = 0; j < jsarrsteps.length(); j++){
+							JSONObject jssteps = jsarrsteps.getJSONObject(j);
+						String path = jssteps.getString("path");
+						Log.i("PATH", path);}
+					}
+					
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				break;
 			default:
 				break;
 			}
@@ -130,6 +154,9 @@ public class Get_List extends Activity {
 		int number = Integer.parseInt(numberinstring);
 		num = number;
 		count = number;
+		/*
+		 * 定时刷新获取所需的基站数据
+		 */
 		final Timer tGet = new Timer();
 		tGet.schedule(new TimerTask() {
 
@@ -158,7 +185,7 @@ public class Get_List extends Activity {
 						jsobj.put("MNC", mnc);
 						jsobj.put("CID", InfoBuf[0][2]);
 						jsobj.put("LAC", InfoBuf[0][3]);
-						jsobj.put("RSSI", num);
+						jsobj.put("RSSI", num); // 验证数据的不一样
 						jsarray.put(jsobj);
 
 						ContentValues cv = new ContentValues();
@@ -234,11 +261,12 @@ public class Get_List extends Activity {
 		newlist.setAdapter(jzadapter);
 		btn_get = (Button) findViewById(R.id.get_lon);
 		btn_get.setOnClickListener(new MyonclickListener());
+		countbutton = (Button) findViewById(R.id.count);
+		countbutton.setOnClickListener(new MyonclickListener());
 		ps = (ProgressBar) findViewById(R.id.processbar);
 	}
 
 	public class MyonclickListener implements OnClickListener {
-		GetJson gj;
 
 		@Override
 		public void onClick(View v) {
@@ -271,13 +299,16 @@ public class Get_List extends Activity {
 				}, 0, 1000);
 
 				break;
-
+			case R.id.count:
+				GetJson.Direction(23.17166,113.346781,23.175544,113.347992, getmsg);//待传输计算后的经纬度
+				break;
 			default:
 				break;
 			}
 
 		}
 	}
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
