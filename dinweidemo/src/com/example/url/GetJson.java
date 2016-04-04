@@ -8,9 +8,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.ImageView;
 
 public class GetJson {
 	public static void Getjizhan(final String mCC, final String mNC,
@@ -324,5 +327,25 @@ public class GetJson {
 			}
 		}).start();
 
+	}
+	/*
+	 * 下面函数用于获取百度静态图，该函数需要传入imageview控件，和地图地址。
+	 */
+	public static void getpic(final ImageView pic,final String pic_url){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+			try {
+				HttpURLConnection con=(HttpURLConnection) new URL(pic_url).openConnection();
+				con.connect();
+				InputStream is=con.getInputStream();
+				Bitmap picmap=BitmapFactory.decodeStream(is);
+				pic.setImageBitmap(picmap);
+				is.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+			}
+		}).start();
 	}
 }

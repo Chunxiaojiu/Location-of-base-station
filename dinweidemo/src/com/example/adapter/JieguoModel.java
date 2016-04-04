@@ -4,11 +4,20 @@ public class JieguoModel {
 	private String lat;
 	private String lon;
 	private String jianjie;
-
-	public JieguoModel(String lat, String lon, String jianjie) {
+private String rssi;
+	public JieguoModel(String lat, String lon,String rssi, String jianjie) {
 		setLat(lat);
 		setLon(lon);
+		setRssi(rssi);
 		setJianjie(jianjie);
+	}
+
+	public String getRssi() {
+		return rssi;
+	}
+
+	public void setRssi(String rssi) {
+		this.rssi = rssi;
 	}
 
 	public String getLat() {

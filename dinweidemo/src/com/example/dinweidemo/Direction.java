@@ -3,6 +3,7 @@ package com.example.dinweidemo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,7 +18,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -35,11 +38,15 @@ public class Direction extends Activity {
 				String jsonstr = (String) msg.obj;
 				Log.i("123456789", jsonstr);
 				try {
-					JSONObject jsjieguo = new JSONObject(jsonstr);
-					String jieguo = jsjieguo.getString("jieguo");
-					String LAT = jsjieguo.getString("LAT");
-					String LON = jsjieguo.getString("LON");
-					list.add(new JieguoModel(LAT, LON, jieguo));
+					JSONArray jsjieguo = new JSONArray(jsonstr);
+					for (int i = 0; i < jsjieguo.length(); i++) {
+						JSONObject jsobj = jsjieguo.getJSONObject(i);
+						String jieguo = jsobj.getString("jieguo");
+						String LAT = jsobj.getString("LAT");
+						String LON = jsobj.getString("LON");
+						String RSSI = jsobj.getString("RSSI");
+						list.add(new JieguoModel(LAT, LON,RSSI, jieguo));
+					}
 					jieguoadapt.notifyDataSetChanged();
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -63,6 +70,8 @@ public class Direction extends Activity {
 			public void run() {
 				Log.i("DB", "qidong");
 				int n = 0;
+				int m = 0;
+				JSONArray jsarr = new JSONArray();
 				String jieguo_text;
 				SQLiteDatabase dbread = db.getReadableDatabase();
 				Cursor c = dbread.query("jizhan", null, null, null, null, null,
@@ -75,7 +84,11 @@ public class Direction extends Activity {
 					if (Integer.parseInt(rssi) > 0) {
 						Log.i("title", lat + lon);
 						n = n + 1;
+						m = Integer.parseInt(rssi);
 						jieguo_text = "第" + n + "次定位有" + rssi + "个基站经纬度为：";
+						lat = "";
+						lon = "";
+						rssi = "";
 					} else {
 						jieguo_text = "";
 					}
@@ -83,12 +96,19 @@ public class Direction extends Activity {
 					try {
 						jsobj.put("LAT", lat);
 						jsobj.put("LON", lon);
+						jsobj.put("RSSI", rssi);
 						jsobj.put("jieguo", jieguo_text);
-						Message msg = new Message();
-						msg.obj = jsobj.toString();
-						msg.what = 5;
-						Log.i("one111111", jsobj.toString());
-						getjieguo.sendMessage(msg);
+						jsarr.put(jsobj);
+
+						if (m == 0) {
+							Message msg = new Message();
+							msg.obj = jsarr.toString();
+							msg.what = 5;
+							Log.i("one111111", jsarr.toString());
+							getjieguo.sendMessage(msg);
+							jsarr = new JSONArray();
+						}
+						m = m - 1;
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
@@ -102,6 +122,16 @@ public class Direction extends Activity {
 		jieguoadapt = new Jieguoadapter(this, list);
 		jieguo_list.setAdapter(jieguoadapt);
 		btn_getmap = (Button) findViewById(R.id.get_map);
+		btn_getmap.setOnClickListener(new MyonclickListener());
+
+	}
+
+	public class MyonclickListener implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+
+		}
 
 	}
 }

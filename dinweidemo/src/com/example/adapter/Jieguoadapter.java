@@ -38,8 +38,8 @@ public class Jieguoadapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			convertView = LayoutInflater.from(context).inflate(R.layout.jieguo_item,
-					null);
+			convertView = LayoutInflater.from(context).inflate(
+					R.layout.jieguo_item, null);
 		}
 		TextView jieguo_lat = (TextView) convertView
 				.findViewById(R.id.jieguo_lat);
@@ -47,11 +47,14 @@ public class Jieguoadapter extends BaseAdapter {
 				.findViewById(R.id.jieguo_lon);
 		TextView jieguo_text = (TextView) convertView
 				.findViewById(R.id.jieguo_text);
+		TextView jieguo_rssi = (TextView) convertView
+				.findViewById(R.id.jieguo_rssi);
+
 		JieguoModel jieguolist = list.get(position);
 		jieguo_lat.setText(jieguolist.getLat());
 		jieguo_lon.setText(jieguolist.getLon());
 		jieguo_text.setText(jieguolist.getJianjie());
-
+		jieguo_rssi.setText(jieguolist.getRssi());
 		return convertView;
 	}
 
