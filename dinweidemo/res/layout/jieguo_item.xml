@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/item" >
+
+    <TextView
+        android:id="@+id/jieguo_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="结果讲解：" />
+
+    <TextView
+        android:id="@+id/jieguo_lat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/jieguo_text" 
+        android:text="1234567890"/>
+
+    <TextView
+        android:id="@+id/jieguo_lon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/jieguo_text"
+        android:layout_marginLeft="30dp"
+        android:layout_toRightOf="@id/jieguo_lat" 
+        android:text="1234567890"/>
+
+</RelativeLayout>

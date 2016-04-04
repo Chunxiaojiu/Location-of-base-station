@@ -38,7 +38,8 @@ public class JizhanAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			convertView = LayoutInflater.from(context).inflate(R.layout.item,null);
+			convertView = LayoutInflater.from(context).inflate(R.layout.item,
+					null);
 		}
 		TextView mcc = (TextView) convertView.findViewById(R.id.mcc);
 		TextView mnc = (TextView) convertView.findViewById(R.id.mnc);

@@ -77,7 +77,7 @@ public class Get_List extends Activity {
 			case 2:
 				String json_jiwei = (String) msg.obj;
 				processnum = processnum + 1;
-				ps.setProgress(10 * processnum / count);
+				ps.setProgress(10 * processnum / count);//进度条专用！
 				try {
 					JSONObject jsob1 = new JSONObject(json_jiwei);
 					String lon = jsob1.getString("lon");
@@ -94,8 +94,9 @@ public class Get_List extends Activity {
 					SQLiteDatabase dbread = db.getReadableDatabase();
 					Cursor c = dbread.query("jizhan", null, null, null, null,
 							null, null);
-					if (n <= count) {
-						c.moveToPosition(n);
+					c.moveToPosition(n);
+					
+						
 						String MCC = c.getString(c.getColumnIndex("MCC"));
 						String MNC = c.getString(c.getColumnIndex("MNC"));
 						String CID = c.getString(c.getColumnIndex("CID"));
@@ -106,7 +107,7 @@ public class Get_List extends Activity {
 						Log.i("123", LAT + LON);
 						list.set(n, new Jizhanmodel(MCC, MNC, CID, LAC, RSSI,
 								LAT, LON, adr));
-
+						if (c.moveToNext()) {
 						n = n + 1;
 					}
 					dbread.close();
@@ -162,9 +163,9 @@ public class Get_List extends Activity {
 
 			@Override
 			public void run() {
-				JSONObject jsobj = new JSONObject();
+				
 				JSONArray jsarray = new JSONArray();
-				try {
+				try {JSONObject jsobj = new JSONObject();
 					SQLiteDatabase dbwrite = db.getWritableDatabase();
 					TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 					int type = tm.getNetworkType();// 获取网络类型
@@ -180,47 +181,48 @@ public class Get_List extends Activity {
 								.getCellLocation();
 						InfoBuf[0][2] = location.getCid();
 						InfoBuf[0][3] = location.getLac();
-
+						
 						jsobj.put("MCC", mcc);
 						jsobj.put("MNC", mnc);
 						jsobj.put("CID", InfoBuf[0][2]);
 						jsobj.put("LAC", InfoBuf[0][3]);
 						jsobj.put("RSSI", num); // 验证数据的不一样
 						jsarray.put(jsobj);
-
+						List<NeighboringCellInfo> infos = tm
+								.getNeighboringCellInfo();
 						ContentValues cv = new ContentValues();
 						cv.put("MCC", mcc);
 						cv.put("MNC", mnc);
 						cv.put("CID", InfoBuf[0][2]);
 						cv.put("LAC", InfoBuf[0][3]);
-						cv.put("RSSI", num);
+						cv.put("RSSI", infos.size());
 						long id = dbwrite.insert("jizhan", null, cv);
 						Log.i("id", String.valueOf(id));
 						char i = 0x40;
-						List<NeighboringCellInfo> infos = tm
-								.getNeighboringCellInfo();
+						
 						for (NeighboringCellInfo info : infos) {
 							i = (char) (i + 1);
 							// 邻居小区号
-							int cid = info.getCid();
+							long cid = info.getCid();
+							
 							// 位置区域码
 							int lac = info.getLac();
 							// 获取邻居小区信号强度
 							int rssi = -113 + 2 * info.getRssi();
-
-							jsobj.put("MCC", mcc);
-							jsobj.put("MNC", mnc);
-							jsobj.put("CID", cid);
-							jsobj.put("LAC", lac);
-							jsobj.put("RSSI", rssi);
-							jsarray.put(jsobj);
+							JSONObject jsobj1 = new JSONObject();
+							jsobj1.put("MCC", mcc);
+							jsobj1.put("MNC", mnc);
+							jsobj1.put("CID", cid);
+							jsobj1.put("LAC", lac);
+							jsobj1.put("RSSI", rssi);
+							jsarray.put(jsobj1);
 
 							cv = new ContentValues();
 							cv.put("MCC", mcc);
 							cv.put("MNC", mnc);
-							cv.put("CID", InfoBuf[0][2]);
-							cv.put("LAC", InfoBuf[0][3]);
-							cv.put("RSSI", 0);
+							cv.put("CID", cid);
+							cv.put("LAC", lac);
+							cv.put("RSSI", rssi);
 							dbwrite.insert("jizhan", null, cv);
 
 						}
@@ -300,7 +302,9 @@ public class Get_List extends Activity {
 
 				break;
 			case R.id.count:
-				GetJson.Direction(23.17166,113.346781,23.175544,113.347992, getmsg);//待传输计算后的经纬度
+				Intent intent = new Intent(Get_List.this,Direction.class);
+				startActivity(intent);
+				overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 				break;
 			default:
 				break;

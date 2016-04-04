@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="19"
+        android:minSdkVersion="15"
         android:targetSdkVersion="21" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -26,6 +26,7 @@
             </intent-filter>
         </activity>
         <activity android:name="Get_List"></activity>
+        <activity android:name="Direction"></activity>
     </application>
 
 </manifest>
