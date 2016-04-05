@@ -80,10 +80,9 @@ public class Get_List extends Activity {
 				ps.setProgress(10 * processnum / count);//进度条专用！
 				try {
 					JSONObject jsob1 = new JSONObject(json_jiwei);
-					String lon = jsob1.getString("lon");
-					String lat = jsob1.getString("lat");
+					double lon = jsob1.getDouble("lon");
+					double lat = jsob1.getDouble("lat");
 					String adr = jsob1.getString("address");
-					Log.i("lat+lon", lat + lon);
 					SQLiteDatabase dbwrite = db.getWritableDatabase();
 					ContentValues jinwei = new ContentValues();
 					jinwei.put("LAT", lat);
@@ -96,7 +95,6 @@ public class Get_List extends Activity {
 							null, null);
 					c.moveToPosition(n);
 					
-						
 						String MCC = c.getString(c.getColumnIndex("MCC"));
 						String MNC = c.getString(c.getColumnIndex("MNC"));
 						String CID = c.getString(c.getColumnIndex("CID"));
@@ -104,7 +102,6 @@ public class Get_List extends Activity {
 						String RSSI = c.getString(c.getColumnIndex("RSSI"));
 						String LAT = c.getString(c.getColumnIndex("LAT"));
 						String LON = c.getString(c.getColumnIndex("LON"));
-						Log.i("123", LAT + LON);
 						list.set(n, new Jizhanmodel(MCC, MNC, CID, LAC, RSSI,
 								LAT, LON, adr));
 						if (c.moveToNext()) {
