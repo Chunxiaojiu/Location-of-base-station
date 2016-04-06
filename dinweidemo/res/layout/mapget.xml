@@ -4,9 +4,34 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/getdian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.40"
+            android:background="@drawable/button"
+            android:text="自己定的点" />
+
+        <Button
+            android:id="@+id/getbaiozhun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.50"
+            android:background="@drawable/button"
+            android:text="标准点" />
+
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:src="@drawable/ic_launcher"/>
+    
 
 </LinearLayout>

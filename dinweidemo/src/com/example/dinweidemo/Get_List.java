@@ -12,6 +12,8 @@ import org.json.JSONObject;
 import com.example.adapter.JizhanAdapter;
 import com.example.adapter.Jizhanmodel;
 import com.example.sql.Db;
+import com.example.sql.DbJieguo;
+import com.example.sql.Dbbiaozhun;
 import com.example.url.GetJson;
 
 import android.app.Activity;
@@ -44,6 +46,7 @@ public class Get_List extends Activity {
 	private static int num, count;
 	private static int n, processnum = 0;
 	private Db db = new Db(this);
+	
 	/*
 	 * 主函数数据处理
 	 */
@@ -113,26 +116,7 @@ public class Get_List extends Activity {
 					e.printStackTrace();
 				}
 				break;
-			case 4://该获取的JSON数据在GetJson的第三类函数前标明,采用原生的JSON来处理，后期可以打包成函数复用
-				String jsonluxian = (String) msg.obj;
-				try {
-					JSONObject jsobj = new JSONObject(jsonluxian).getJSONObject("result");
-					Log.i("PATH", jsobj.toString());
-					JSONArray jsarr = jsobj.getJSONArray("routes");
-					Log.i("PATH", jsarr.toString());//双重循环解析json数组
-					for (int i = 0; i < jsarr.length(); i++) {
-						JSONObject jssroutes = jsarr.getJSONObject(i);
-						JSONArray jsarrsteps = jssroutes.getJSONArray("steps");
-						for(int j = 0; j < jsarrsteps.length(); j++){
-							JSONObject jssteps = jsarrsteps.getJSONObject(j);
-						String path = jssteps.getString("path");
-						Log.i("PATH", path);}
-					}
-					
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				break;
+			
 			default:
 				break;
 			}
@@ -315,8 +299,8 @@ public class Get_List extends Activity {
 		super.onDestroy();
 		SQLiteDatabase dbdelet = db.getWritableDatabase();
 		dbdelet.delete("jizhan", null, null);
-		String sql = "DELETE FROM sqlite_sequence";
-		dbdelet.execSQL(sql);
+		String sql3 = "DELETE FROM sqlite_sequence";
+		dbdelet.execSQL(sql3);
 		dbdelet.close();
 		processnum = 0;
 		n = 0;

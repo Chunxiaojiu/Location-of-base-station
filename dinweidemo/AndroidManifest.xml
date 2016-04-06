@@ -27,7 +27,7 @@
         </activity>
         <activity android:name="Get_List"></activity>
         <activity android:name="Direction"></activity>
-        <activity android:name="mapget"></activity>
+        <activity android:name="Mapget"></activity>
     </application>
 
 </manifest>

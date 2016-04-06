@@ -5,18 +5,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DbJieguo extends SQLiteOpenHelper {
+public class Dbbiaozhun extends SQLiteOpenHelper {
 
-	public DbJieguo(Context context) {
-		super(context, "dbjieguo", null, 1);
+	public Dbbiaozhun(Context context) {
+		super(context, "dbbiaozhun", null, 1);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL("CREATE TABLE jieguo("
+		db.execSQL("CREATE TABLE biaozhun("
 				+ "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-				+ "GETLAT TEXT DEFAULT \"\"," + "GETLON TEXT DEFAULT \"\")");
+				+ "TRUELATLON TEXT DEFAULT \"\")");
 	}
 
 	@Override
