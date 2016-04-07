@@ -2,11 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    <Button
-        android:id="@+id/get_map"
+     <Button
+        android:id="@+id/chafen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button"
+        android:text="数据差分" />
+    
+    <Button
+        android:id="@+id/get_map"
+        android:layout_below="@id/chafen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="@drawable/button"
         android:text="地图标记" />
 

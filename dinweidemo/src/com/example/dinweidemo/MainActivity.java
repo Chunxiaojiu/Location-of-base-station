@@ -1,7 +1,12 @@
 package com.example.dinweidemo;
 
+import com.example.sql.Db;
+import com.example.sql.DbJieguo;
+import com.example.sql.Dbbiaozhun;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,6 +19,9 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 private EditText edt1,edt2;
 	private Button btn1;
+	private Db db = new Db(this);
+	private DbJieguo dbjieguo = new DbJieguo(this);
+	private Dbbiaozhun dbbiaozhun = new Dbbiaozhun(this);
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -41,6 +49,19 @@ private EditText edt1,edt2;
 					Toast.makeText(MainActivity.this, "获取次数未输入，请输入！", Toast.LENGTH_SHORT).show();
 				}
 				else{
+					SQLiteDatabase dbbiaodelet = dbbiaozhun.getWritableDatabase();
+					dbbiaodelet.delete("biaozhun", null, null);
+					dbbiaodelet.close();
+					SQLiteDatabase dbjieguonull = dbjieguo.getWritableDatabase();
+					dbjieguonull.delete("jieguo", null, null);
+					dbjieguonull.close();
+					SQLiteDatabase dbdelet = db.getWritableDatabase();
+					dbdelet.delete("jizhan", null, null);
+					String sql3 = "DELETE FROM sqlite_sequence";
+					dbdelet.execSQL(sql3);
+					dbdelet.close();
+					
+					
 				Intent intent = new Intent(MainActivity.this, Get_List.class);
 				intent.putExtra("TIME", time);
 				intent.putExtra("number", number);

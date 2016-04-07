@@ -297,11 +297,6 @@ public class Get_List extends Activity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		SQLiteDatabase dbdelet = db.getWritableDatabase();
-		dbdelet.delete("jizhan", null, null);
-		String sql3 = "DELETE FROM sqlite_sequence";
-		dbdelet.execSQL(sql3);
-		dbdelet.close();
 		processnum = 0;
 		n = 0;
 	}

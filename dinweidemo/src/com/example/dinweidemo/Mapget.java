@@ -92,13 +92,5 @@ public class Mapget extends Activity {
 		}
 	}
 
-	public void onDestroy() {
-		super.onDestroy();
-		SQLiteDatabase dbdelet = dbbiaozhun.getWritableDatabase();
-		dbdelet.delete("biaozhun", null, null);
-		dbdelet.close();
-		SQLiteDatabase dbjieguonull = dbjieguo.getWritableDatabase();
-		dbjieguonull.delete("jieguo", null, null);
-		dbjieguonull.close();
-	}
+
 }

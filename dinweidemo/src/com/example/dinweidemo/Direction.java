@@ -33,7 +33,7 @@ public class Direction extends Activity {
 	private ListView jieguo_list;
 	private List<JieguoModel> list;
 	private Jieguoadapter jieguoadapt;
-	private Button btn_getmap;
+	private Button btn_getmap, chafen;
 	private Db db = new Db(this);
 	private DbJieguo dbjieguo = new DbJieguo(this);
 	private Dbbiaozhun dbbiaozhun = new Dbbiaozhun(this);
@@ -156,6 +156,7 @@ public class Direction extends Activity {
 							getlon = getlon / getrssi;
 							Log.i("jisuanjieguo", String.valueOf(getlat)
 									+ "==========" + String.valueOf(getlon));
+
 							SQLiteDatabase dbjieguow = dbjieguo
 									.getWritableDatabase();
 							ContentValues cv = new ContentValues();
@@ -186,6 +187,8 @@ public class Direction extends Activity {
 		jieguo_list.setAdapter(jieguoadapt);
 		btn_getmap = (Button) findViewById(R.id.get_map);
 		btn_getmap.setOnClickListener(new MyonclickListener());
+		chafen = (Button) findViewById(R.id.chafen);
+		chafen.setOnClickListener(new MyonclickListener());
 
 	}
 
@@ -228,11 +231,55 @@ public class Direction extends Activity {
 						android.R.anim.slide_out_right);
 
 				break;
+			case R.id.chafen:
+				ArrayList<Double> arrLat = new ArrayList<Double>();
+				ArrayList<Double> arrLon = new ArrayList<Double>();
+				SQLiteDatabase errdelete = dbjieguo.getWritableDatabase();
+				Cursor cdelete = errdelete.query("jieguo", null, null, null,
+						null, null, null);
+				while (cdelete.moveToNext()) {
+					arrLat.add(cdelete.getDouble(cdelete
+							.getColumnIndex("GETLAT")));
+					arrLon.add(cdelete.getDouble(cdelete
+							.getColumnIndex("GETLON")));
+				}
+				// 采用肖维乐等置信概率方法去除错误点
+				double wn = 1 + 0.4 * Math.log(arrLat.size());// 近似的肖恩系数
+				double Latava = getAverage(arrLat);
+				double Lonava = getAverage(arrLon);
+				double biaozhunchaLat = getbiaozhuncha(arrLat, Latava);
+				double biaozhunchaLon = getbiaozhuncha(arrLon, Lonava);
+				Log.i("nimabi", String.valueOf(biaozhunchaLat) + "$$$$"
+						+ String.valueOf(biaozhunchaLon));
+				for (int j = 0; j < arrLat.size(); j++) {
+					if (Math.abs(arrLat.get(j) - Latava) > wn * biaozhunchaLat) {
+						errdelete.delete("jieguo", "_id=?",
+								new String[] { String.valueOf(j) });
+					}
+
+				}
+				errdelete.close();
 			default:
 				break;
 			}
 		}
-
 	}
 
+	public double getAverage(List<Double> list) {
+		double sum = 0;
+		for (int i = 0; i < list.size(); i++) {
+			sum += list.get(i).doubleValue();
+		}
+		return sum / list.size();
+	}
+
+	public double getbiaozhuncha(List<Double> list, Double Average) {
+		double sum = 0;
+		for (int i = 0; i < list.size(); i++) {
+			sum += (list.get(i).doubleValue() - Average)
+					* (list.get(i).doubleValue() - Average);
+		}
+		sum = sum / (list.size() - 1);
+		return Math.sqrt(sum);
+	}
 }
