@@ -79,7 +79,7 @@ public class Get_List extends Activity {
 			 */
 			case 2:
 				String json_jiwei = (String) msg.obj;
-				processnum = processnum + 1;
+				
 				ps.setProgress(10 * processnum / count);//进度条专用！
 				try {
 					JSONObject jsob1 = new JSONObject(json_jiwei);
@@ -109,6 +109,7 @@ public class Get_List extends Activity {
 								LAT, LON, adr));
 						if (c.moveToNext()) {
 						n = n + 1;
+						processnum = processnum + 1;
 					}
 					dbread.close();
 					jzadapter.notifyDataSetChanged();

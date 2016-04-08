@@ -1,5 +1,10 @@
 package com.example.dinweidemo;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+
 import com.example.sql.DbJieguo;
 import com.example.sql.Dbbiaozhun;
 import com.example.url.GetJson;
@@ -70,27 +75,40 @@ public class Mapget extends Activity {
 
 				break;
 			case R.id.getbaiozhun:
+				ArrayList<String> truelist = new ArrayList<String>();
 				String str2 = "http://api.map.baidu.com/staticimage/v2?ak=d6snIPGxcpWyZxD6UnYCecMk&width=500&height=500&zoom=18&paths=";
 				SQLiteDatabase biaozhunread = dbbiaozhun.getReadableDatabase();
 				Cursor biaozhunc = biaozhunread.query("biaozhun", null, null,
 						null, null, null, null);
 				while (biaozhunc.moveToNext()) {
-					str2 = str2
-							+ biaozhunc.getString(biaozhunc
-									.getColumnIndex("TRUELATLON")) + ";";
-
+					truelist.add(biaozhunc.getString(biaozhunc
+							.getColumnIndex("TRUELATLON")));
 				}
-				str2 = str2 + "&pathStyles=0x66ccff,5,1";
-				Log.i("biaozhunc", str2);
 
+				
+				removeDuplicate(truelist);
+				for (int i = 0; i < truelist.size(); i++) {
+					Log.i("baiozhuan paixuhou", truelist.get(i));
+					str2 = str2 + truelist.get(i) + ";";
+				}
+				str2 = str2 + "&pathStyles=0x000000,5,1";
+				Log.i("biaozhunc", str2);
 				GetJson.getpic(mapget, str2, imagehandler);
 				break;
-			
+
 			default:
 				break;
 			}
 		}
 	}
-
-
+	public void removeDuplicate(List list) {  
+		   for ( int i = 0 ; i < list.size() - 1 ; i ++ ) {  
+		     for ( int j = list.size() - 1 ; j > i; j -- ) {  
+		       if (list.get(j).equals(list.get(i))) {  
+		         list.remove(j);  
+		       }   
+		      }   
+		    }   
+		    System.out.println(list);  
+		}   
 }

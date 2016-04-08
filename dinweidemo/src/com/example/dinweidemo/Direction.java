@@ -28,6 +28,7 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class Direction extends Activity {
 	private ListView jieguo_list;
@@ -129,13 +130,14 @@ public class Direction extends Activity {
 
 					} else {
 						jieguo_text = "";
-						getlat = getlat - lat / rssi;
-						getlon = getlon - lon / rssi;
-						getrssi = getrssi - 1 / rssi;
-						Log.i("LAT+LON",
-								String.valueOf(getlat) + "=========="
-										+ String.valueOf(getlon)
-										+ String.valueOf(getrssi));
+						getlat = getlat - lat
+								/ Math.pow(10, (Math.abs(rssi) - 58.5) / 33);
+						getlon = getlon - lon
+								/ Math.pow(10, (Math.abs(rssi) - 58.5) / 33);
+						getrssi = getrssi - 1
+								/ Math.pow(10, (Math.abs(rssi) - 58.5) / 33);
+						Log.i("LAT+LON", String.valueOf(getlat) + "=========="
+								+ String.valueOf(getlon));
 					}
 					JSONObject jsobj = new JSONObject();
 					try {
@@ -258,6 +260,10 @@ public class Direction extends Activity {
 					}
 
 				}
+				Toast.makeText(
+						getApplicationContext(),
+						"差分完成，标准差lat：" + biaozhunchaLat + "标准差lon："
+								+ biaozhunchaLon, Toast.LENGTH_SHORT).show();
 				errdelete.close();
 			default:
 				break;
